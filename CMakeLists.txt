@@ -24,6 +24,8 @@ set (IMGUI_SOURCES
       "imgui/examples/libs/gl3w/GL/gl3w.c"
       "imgui/examples/libs/gl3w/GL/gl3w.h"
       "imgui/examples/libs/gl3w/GL/glcorearb.h"
+      "stb/stb_image.h"
+      "stb/stb.h"
       )
 
 
@@ -34,6 +36,7 @@ add_executable(app main.cpp ${GL3W} ${IMGUI_SOURCES})
 target_include_directories(app PUBLIC ${OPENGL_INCLUDE_DIR})
 target_include_directories(app PUBLIC imgui/examples/libs/gl3w)
 target_include_directories(app PUBLIC imgui)
+target_include_directories(app PUBLIC stb)
 
 
 target_link_libraries(app glfw ${OPENGL_gl_LIBRARY})
