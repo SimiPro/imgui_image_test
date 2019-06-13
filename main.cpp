@@ -72,7 +72,7 @@ int main(void) {
 
         // texture
         if (first_run) {
-            unsigned char* my_image_data = stbi_load("/home/simi/Pictures/shutdown_buttom.jpeg", &my_image_width, &my_image_height, NULL, 4);
+            unsigned char* my_image_data = stbi_load("../wikipedia.png", &my_image_width, &my_image_height, NULL, 4);
             cout << "image height x width: " << my_image_height << " x " << my_image_width << endl;
             // Turn the RGBA pixel data into an OpenGL texture:
             glGenTextures(1, &my_opengl_texture);
