@@ -25,6 +25,7 @@ set (IMGUI_SOURCES
       "imgui/examples/libs/gl3w/GL/gl3w.h"
       "imgui/examples/libs/gl3w/GL/glcorearb.h"
       "stb/stb_image.h"
+      "stb/stb_image_write.h"
       "stb/stb.h"
       )
 

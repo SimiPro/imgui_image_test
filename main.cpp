@@ -12,6 +12,9 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
+
 
 using namespace std;
 
@@ -21,6 +24,8 @@ int main(void) {
     /* Initialize the library */
     if (!glfwInit())
         return -1;
+
+
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
@@ -56,6 +61,7 @@ int main(void) {
     GLuint my_opengl_texture;             
     int my_image_width, my_image_height;
 
+    
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
         /* Poll for and process events */
@@ -72,18 +78,23 @@ int main(void) {
 
         // texture
         if (first_run) {
-            unsigned char* my_image_data = stbi_load("../wikipedia.png", &my_image_width, &my_image_height, NULL, 4);
-            cout << "image height x width: " << my_image_height << " x " << my_image_width << endl;
+            int channels;
+            unsigned char* my_image_data = stbi_load("../wikipedia.png", &my_image_width, &my_image_height, &channels, 4);
+            assert(my_image_data != NULL);
+            // last parameter is stride in bytes which is width*channels
+            stbi_write_png("loaded_file.png", my_image_width, my_image_height, channels, my_image_data, my_image_width*channels);
+            cout << "image ncomp: " << channels << " height x width: " << my_image_height << " x " << my_image_width << endl;
             // Turn the RGBA pixel data into an OpenGL texture:
             glGenTextures(1, &my_opengl_texture);
-            glBindTexture(GL_TEXTURE_2D, my_opengl_texture);
-           // glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+            glBindTexture(GL_TEXTURE_2D, my_opengl_texture);    
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, my_image_width, my_image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, my_image_data);
+
             // Now that we have an OpenGL texture, assuming our imgui rendering function (imgui_impl_xxx.cpp file) takes GLuint as ImTextureID, we can display it:
             first_run = false;
         }
 
-        ImGui::Image((void*)(intptr_t)my_opengl_texture, ImVec2(my_image_width, my_image_height));
+        ImGui::Image((void*)(intptr_t)my_opengl_texture, ImVec2(my_image_width*2, my_image_height*2));
         ImGui::ImageButton((void*)(intptr_t)my_opengl_texture, ImVec2(200.f, 200.f));
 
 
